@@ -1,31 +1,18 @@
-name: Deploy to GitHub Pages
+image: Ubuntu2204  # образ для сборки
 
-on:
-  push:
-    branches:
-      - main
+stack: node 20  # окружение
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+branches:
+  only:
+    - master  # ветка git
+    - main
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+cache: node_modules  # кеширование
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
+install:
+  - npm i -D # команда установки зависимостей
 
-    - name: Install dependencies
-      run: yarn install
+build: off  # отключаем встроенную в appveyor систему сборки
 
-    - name: Build project
-      run: yarn build
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+build_script:
+  - npm run build   # команда сборки
